@@ -1,0 +1,12 @@
+const express = require('express')
+const router = express.Router()
+const tecnologia = require('../controllers/tecnologiaController')
+router.get('/listar',tecnologia.listar)
+router.post('/crear',tecnologia.crear)
+router.delete('/eliminar/:id',tecnologia.eliminarPorId)
+router.put('/editar/:id',tecnologia.actualizarPorId)
+router.get('/foto/:id',tecnologia.foto)
+router.get('/tecnologias-frontend',tecnologia.tecnologiasFrontend)
+router.get('/tecnologias-backend',tecnologia.tecnologiasBackend)
+router.get('/tecnologias-database',tecnologia.tecnologiasDatabase)
+module.exports = router;
