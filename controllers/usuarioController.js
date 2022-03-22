@@ -71,6 +71,3 @@ exports.listar = (req, res)=>{
     })
 }
 
-// exports.foto = (req, res)=>{
-
-// }

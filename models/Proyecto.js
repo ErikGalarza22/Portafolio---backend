@@ -15,10 +15,13 @@ const proyectoSchema = new mongoose.Schema({
       trim: true,
     },
 
-    foto: {
-        data: Buffer,
-        contentType: String
-      },
+    url: {
+      type: String,
+    },
+    
+    public_id: {
+      type: String,
+    },
 
     enlace:{
         type:String,

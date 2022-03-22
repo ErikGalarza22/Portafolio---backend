@@ -3,21 +3,53 @@ const formidable = require('formidable');
 const fs = require('fs');
 
 exports.crear = (req, res) => {
-    let form = new formidable.IncomingForm()
-    form.keepExtensions = true
+
+    let form = new formidable.IncomingForm();
+    form.keepExtensions = true;
     form.parse(req, (err, fields, files) => {
-        let proyecto = new Proyecto(fields)
-        console.log(files.foto.path)
-         proyecto.foto.data = fs.readFileSync(files.foto.path)//aqui se obtiene el contenido de la imagen, en base 64
-         proyecto.foto.contentType = files.foto.type
-       proyecto.save((error, data)=>{
-           if(error){
-               return res.status(400).send({message:'error al guardar el proyecto'})
-           }
-           return res.json(data)
-       })
+      console.log(files);
+      if (!fields.nombre) {
+        return res.status(400).send({ message: "El nombre es requerido" });
+      }
+      if (!fields.enlace) {
+        return res.status(400).send({ message: "El enlace es requerido" });
+      }
+  
+      let proyecto = new Proyecto(fields);
+      console.log(files);
+  
+  if(files.foto){
+  console.log('si existe');
+    console.log(fs.existsSync(files.foto.path));//true
+  
+    var obj = cloudinary.uploader.upload(files.foto.path);
+    obj.then(response=>{
+      proyecto.url = response.secure_url,
+      proyecto.public_id = response.public_id
+      console.log(proyecto);
+  
+      proyecto.save()
+      .then((data) => {
+        res.send(data);
+      }).catch(err=>{
+        res.status(500).send({
+          message: err.message || "Algun error ocurrió mientras se creaba el proyecto.",
+        });
       })
-    }
+    });//promesa cloudinary  
+  
+  }else{
+  console.log('no existe');
+  proyecto.save()
+        .then((data) => {
+          res.send(data);
+        }).catch(err=>{
+          res.status(500).send({
+            message: err.message || "Algun error ocurrió mientras se creaba el proyecto.",
+          });
+        })
+  
+      }
 
 exports.listar=(req,res)=>{
     Proyecto.find()

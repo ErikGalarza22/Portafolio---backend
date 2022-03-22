@@ -9,10 +9,16 @@ const tecnologia = new mongoose.Schema({
         minlength:0,
         maxlength:40
     },
-    foto:{
-        data:Buffer,
-        contentType: String
+     url: {
+      type: String,
+      // required: true,
     },
+    
+    public_id: {
+      type: String,
+      // required: true,
+    },
+   
     tipo:{
         type:Number,
         min:1,max:3 //1: backend 2:frontend 3:database
