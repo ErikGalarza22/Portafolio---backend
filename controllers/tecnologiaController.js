@@ -86,16 +86,17 @@ exports.actualizarPorId = (req, res) => {
   form.parse(req, (err, fields, files) => {
 
     console.log(fields);
-    let tecnologiaNuevo = new Tecnologia(fields);
     let id = req.params.id;
     tecno = Tecnologia.findById(id, (err,data)=>{
       if(err){
         console.log(err);
       }
-
+      console.log(data);
       cloudinary.uploader.destroy(data.public_id);//elimino la imagen anterior
 
-  if (fs.existsSync(files.foto)) {//si viene una imagen nueva
+  if (files.foto) {//si viene una imagen nueva
+    console.log('Si hay nueva imagen');
+
     var newImg = cloudinary.uploader.upload(files.foto.path);//cargo la nueva imagen
     newImg.then(response=>{
       Tecnologia.findByIdAndUpdate(
